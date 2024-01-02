@@ -1,20 +1,38 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-
+//import LandingPage from "../layout/LandingPage.vue";
+import DashboardIndex from "../pages/dashboard/DashboardIndex.vue";
+import AccountIndex from "../pages/accounts/AccountIndex.vue";
+import TransactionIndex from "../pages/transaction/TransactionIndex.vue";
 const routes = [
   {
-    path: "/",
-    name: "home",
-    component: HomeView,
+    path: "/dashboard",
+    name: "dashboard",
+    component: DashboardIndex,
+    meta: {
+      title: "dashboard",
+      layout: "panel",
+      requiresAuth: false,
+    },
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/account",
+    name: "account",
+    component: AccountIndex,
+    meta: {
+      title: "account",
+      layout: "panel",
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/transaction",
+    name: "transaction",
+    component: TransactionIndex,
+    meta: {
+      title: "transaction",
+      layout: "panel",
+      requiresAuth: false,
+    },
   },
 ];
 

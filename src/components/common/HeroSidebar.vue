@@ -6,13 +6,11 @@
     <nav>
       <ul v-for="(item, index) in items" :key="index">
         <li
-          @click="selectedItems(item.path, index)"
+          @click="selectedItems(item.path, item.name, index)"
           :class="[activeIndex === index ? 'active' : null]"
         >
           <component :is="item.icons"> </component>
-          <span v-if="screenWidth >= 1920 ? true : false">
-            {{ item.name }}</span
-          >
+          <span v-if="screenWidth >= 768 ? true : false"> {{ item.name }}</span>
         </li>
       </ul>
     </nav>
@@ -33,7 +31,7 @@ export default {
     iconReport,
     iconSetting,
   },
-  setup() {
+  setup(props, { emit }) {
     const router = inject("$router");
     const screenWidth = screen.width;
     const activeIndex = ref(0);
@@ -69,7 +67,8 @@ export default {
         path: "/account",
       },
     ]);
-    const selectedItems = (routes, index) => {
+    const selectedItems = (routes, name, index) => {
+      emit("passRoutes", name);
       activeIndex.value = index;
       router.push(routes);
     };
@@ -87,7 +86,7 @@ export default {
   background-color: var(--sidebar-bg-color);
   color: var(--font-primary);
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-  height: 100vh;
+  height: 100%;
   transition: width 0.3s;
   overflow-y: auto;
 }
@@ -103,7 +102,7 @@ export default {
 }
 nav {
   margin: 20px;
-  line-height: 30px;
+  height: 100vh;
 }
 nav > ul {
   list-style: none;
@@ -143,7 +142,7 @@ nav > ul > li:hover {
     align-items: center;
     gap: 15px;
     margin: 0px;
-    line-height: 0px;
+    height: unset;
   }
 }
 </style>

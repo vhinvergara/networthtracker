@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h4>
-      {{ title }}
+      {{ $store.state.titlePages }}
     </h4>
   </div>
 </template>

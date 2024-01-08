@@ -35,10 +35,16 @@
               /></span>
               <div class="description">
                 <h4>{{ item.description }}</h4>
-                <h5>{{ item.category }}</h5>
+                <h5>{{ item.date }}</h5>
               </div>
             </li>
-            <li @click="routeTransactionDetails(item)" class="amount">
+            <li v-if="ifLayoutMax" class="column-two">
+              <h4>{{ item.category }}</h4>
+            </li>
+            <li v-if="ifLayoutMax" class="column-three">
+              <h4>{{ item.paymentMode }}</h4>
+            </li>
+            <li class="amount">
               <h4
                 :class="
                   item.type === 'expense'
@@ -50,7 +56,12 @@
               >
                 {{ currencyFormat(item) }}
               </h4>
-              <img :src="require(`@/assets/images/icons/menus.png`)" alt="" />
+              <img
+                v-if="!ifLayoutMax"
+                @click="routeTransactionDetails(item)"
+                :src="require(`@/assets/images/icons/menus.png`)"
+                alt=""
+              />
             </li>
           </ul>
         </div>
@@ -75,7 +86,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import Chart from "chart.js/auto";
 import transferSheet from "@/utils/transactions/transferTransactionSheet";
@@ -84,12 +94,19 @@ import expenseSheet from "@/utils/transactions/expenseTransactionSheet";
 import billSheet from "@/utils/bills/upcomingBillSheet.js";
 import { onMounted, ref, reactive } from "vue";
 export default {
+  props: {
+    ifLayoutMax: {
+      type: Boolean,
+    },
+  },
   setup() {
     const itemList = ref([
       595393, 591031, 593810, 597762, 600311, 603795, 605112, 601331, 599321,
       600531, 604743, 605932,
     ]);
-    const itemAssets = ref([4500, 12393, 50000, 120000, 100000, 34500]);
+    const itemAssets = ref([
+      4500, 12393, 50000, 120000, 100000, 34500, 56933, 45911,
+    ]);
     const itemLiablities = ref([95323, 21031, 593810]);
     const itemBills = reactive([
       {
@@ -141,6 +158,24 @@ export default {
         category: "Food",
         type: "expense",
         paymentMode: "Cash",
+      },
+      {
+        description: "Starbucks",
+        amount: 245,
+        date: "January 04, 2024",
+        icon: "expense.png",
+        category: "Food",
+        type: "expense",
+        paymentMode: "Cash",
+      },
+      {
+        description: "Adidas",
+        amount: 5349,
+        date: "January 04, 2024",
+        icon: "expense.png",
+        category: "Shopping",
+        type: "expense",
+        paymentMode: "Credit Card",
       },
       {
         description: "LRT",
@@ -254,6 +289,8 @@ export default {
             "Investment",
             "Real Estate",
             "Property",
+            "Business",
+            "Brokerage",
           ],
           datasets: [
             {
@@ -394,8 +431,8 @@ export default {
 }
 .grid-box-transaction ul {
   list-style: none;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1.8fr 1.3fr 1fr 1fr;
   margin: 8px 0px;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   border-radius: 8px;
@@ -409,6 +446,7 @@ export default {
 .amount {
   margin: auto 14px;
   display: flex;
+  justify-content: flex-end;
   gap: 5px;
   align-items: center;
 }
@@ -445,7 +483,17 @@ export default {
 .bg-color-transfer {
   color: rgb(101, 104, 101);
 }
-@media only screen and (max-width: 844px) and (min-width: 390px) {
+.column-two,
+.column-three {
+  margin: auto 14px;
+}
+.column-two h4,
+.column-three h4 {
+  color: rgb(77, 78, 78);
+  font-weight: 600;
+  font-size: 14px;
+}
+@media only screen and (max-width: 768px) and (min-width: 320px) {
   .grid-container-one {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
@@ -454,6 +502,10 @@ export default {
   }
   .box-two {
     grid-template-columns: repeat(1, 1fr);
+  }
+  .grid-box-transaction ul {
+    display: flex;
+    justify-content: space-between;
   }
   .grid-container-two {
     display: grid;
@@ -464,8 +516,8 @@ export default {
     margin: 10px 0px;
   }
   .networth1 {
-    max-width: 230px;
-    max-height: 230px;
+    max-width: 280px;
+    max-height: 280px;
     display: flex;
     margin: auto;
   }

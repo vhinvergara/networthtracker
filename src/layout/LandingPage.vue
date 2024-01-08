@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="box-one">
-      <HeroSidebar @passRoutes="getDetails" />
+      <HeroSidebar @passRoutes="getDetails" :ifLayoutMax="breakpoint" />
     </div>
     <div class="box-two">
       <span class="header">
@@ -10,7 +10,7 @@
       </span>
       <section class="content">
         <hero-title-header :title="titlePages"></hero-title-header>
-        <router-view />
+        <router-view :ifLayoutMax="breakpoint" />
       </section>
     </div>
   </div>
@@ -18,7 +18,7 @@
 <script>
 import HeroSidebar from "@/components/common/HeroSidebar.vue";
 import HeroTopHeader from "@/components/common/HeroTopheader.vue";
-import { ref } from "vue";
+import { inject } from "vue";
 
 export default {
   components: {
@@ -26,13 +26,15 @@ export default {
     HeroTopHeader,
   },
   setup() {
-    const titlePages = ref("Dashboard");
-    const getDetails = (val) => {
-      titlePages.value = val;
+    const store = inject("$store");
+    const breakpoint = inject("$ifLayoutMax");
+    store.commit("firstFunction");
+    const getDetails = () => {
+      store.commit("firstFunction");
     };
     return {
       getDetails,
-      titlePages,
+      breakpoint,
     };
   },
 };
@@ -45,7 +47,7 @@ export default {
 .content {
   margin: 30px 75px;
 }
-@media only screen and (max-width: 844px) and (min-width: 390px) {
+@media only screen and (max-width: 768px) and (min-width: 320px) {
   .container {
     grid-template-columns: none;
   }

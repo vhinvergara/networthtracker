@@ -11,5 +11,6 @@ app.use(router);
 app.provide("$axios", axios);
 app.provide("$router", router);
 app.provide("$store", store);
+app.provide("$ifLayoutMax", screen.width > 768 ? true : false); //Default desktop
 app.component("hero-title-header", TitleHeader);
 app.mount("#app");

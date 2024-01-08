@@ -1,9 +1,14 @@
 import { createStore } from "vuex";
 import persistedStateVuex from "persisted-state-vuex";
 export default createStore({
-  state: {},
+  state: {
+    titlePages: "Dashboard",
+    isLoading: false,
+  },
   getters: {},
-  mutations: {},
+  mutations: {
+    firstFunction() {},
+  },
   actions: {},
   modules: {},
   plugins: [persistedStateVuex.init],

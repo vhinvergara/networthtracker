@@ -7,10 +7,10 @@
       <ul v-for="(item, index) in items" :key="index">
         <li
           @click="selectedItems(item.path, item.name, index)"
-          :class="[activeIndex === index ? 'active' : null]"
+          :class="[item.name === $store.state.titlePages ? 'active' : null]"
         >
           <component :is="item.icons"> </component>
-          <span v-if="screenWidth >= 768 ? true : false"> {{ item.name }}</span>
+          <span v-if="ifLayoutMax ? true : false"> {{ item.name }}</span>
         </li>
       </ul>
     </nav>
@@ -24,6 +24,11 @@ import iconTransaction from "@/assets/images/svgs/iconTransaction.vue";
 import iconReport from "@/assets/images/svgs/iconReport.vue";
 import iconSetting from "@/assets/images/svgs/iconSetting.vue";
 export default {
+  props: {
+    ifLayoutMax: {
+      type: Boolean,
+    },
+  },
   components: {
     iconDashboard,
     iconAccount,
@@ -33,7 +38,7 @@ export default {
   },
   setup(props, { emit }) {
     const router = inject("$router");
-    const screenWidth = screen.width;
+    const store = inject("$store");
     const activeIndex = ref(0);
     const items = reactive([
       {
@@ -67,15 +72,14 @@ export default {
         path: "/account",
       },
     ]);
-    const selectedItems = (routes, name, index) => {
-      emit("passRoutes", name);
-      activeIndex.value = index;
+    const selectedItems = (routes, name) => {
+      emit("passRoutes", name, routes);
+      store.state.titlePages = name;
       router.push(routes);
     };
     return {
       items,
       activeIndex,
-      screenWidth,
       selectedItems,
     };
   },
@@ -126,7 +130,7 @@ nav > ul > li:hover {
   background-color: var(--primary-color);
   color: var(--light-color);
 }
-@media only screen and (max-width: 844px) and (min-width: 390px) {
+@media only screen and (max-width: 768px) and (min-width: 320px) {
   .wrapper {
     max-height: 60px;
     transition: width 0.3s;
